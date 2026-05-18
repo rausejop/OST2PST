@@ -1,0 +1,44 @@
+import win32com.client
+import os
+
+def ost_a_pst(ruta_ost, ruta_pst):
+    try:
+        # Validar que el archivo OST exista
+        if not os.path.exists(ruta_ost):
+            print("El archivo OST no existe.")
+            return
+
+        # Iniciar la aplicación Outlook en segundo plano
+        outlook = win32com.client.Dispatch("Outlook.Application")
+        namespace = outlook.GetNamespace("MAPI")
+
+        # Añadir el archivo OST a la sesión actual
+        # Nota: Dependiendo de la versión de Outlook, esto puede requerir que 
+        # el OST esté asociado al perfil actual.
+        namespace.AddStore(ruta_ost)
+        ost_store = namespace.Stores.Item(namespace.Stores.Count)
+
+        # Crear un nuevo archivo PST vacío
+        namespace.AddStore(ruta_pst)
+        pst_store = namespace.Stores.Item(namespace.Stores.Count)
+
+        # Copiar las carpetas del OST al PST
+        for folder in ost_store.GetRootFolder().Folders:
+            try:
+                folder.CopyTo(pst_store.GetRootFolder())
+            except Exception as e:
+                print(f"No se pudo copiar la carpeta {folder.Name}: {e}")
+
+        # Cerrar los almacenes de datos
+        namespace.RemoveStore(ost_store.GetRootFolder())
+        namespace.RemoveStore(pst_store.GetRootFolder())
+        
+        print("Conversión completada con éxito.")
+
+    except Exception as e:
+        print(f"Error durante la conversión: {e}")
+
+# Ejemplo de uso
+ruta_origen = r"C:\ruta\al\archivo.ost"
+ruta_destino = r"C:\ruta\al\archivo.pst"
+ost_a_pst(ruta_origen, ruta_destino)
