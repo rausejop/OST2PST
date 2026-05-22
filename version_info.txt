@@ -1,0 +1,25 @@
+# Auto-generado por build.ps1 desde __version__. NO EDITAR A MANO.
+VSVersionInfo(
+  ffi=FixedFileInfo(
+    filevers=(3, 1, 0, 0),
+    prodvers=(3, 1, 0, 0),
+    mask=0x3f, flags=0x0, OS=0x40004, fileType=0x1, subtype=0x0, date=(0, 0),
+  ),
+  kids=[
+    StringFileInfo([
+      StringTable('040904B0', [
+        StringStruct('CompanyName', 'ost2pst project'),
+        StringStruct('FileDescription',
+                     'Procesador de ficheros Outlook OST '
+                     '(exportacion a PST / extraccion a EML)'),
+        StringStruct('FileVersion', '3.1.0.0'),
+        StringStruct('InternalName', 'ost2pst'),
+        StringStruct('LegalCopyright', ''),
+        StringStruct('OriginalFilename', 'ost2pst.exe'),
+        StringStruct('ProductName', 'ost2pst'),
+        StringStruct('ProductVersion', '3.1.0.0'),
+      ]),
+    ]),
+    VarFileInfo([VarStruct('Translation', [1033, 1200])]),
+  ],
+)
