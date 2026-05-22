@@ -1,0 +1,7 @@
+# Build pinned to Python 3.9 — única versión con wheel precompilado de
+# libpff-python en Windows. Resto compatible con 3.9+.
+libpff-python==20211114
+pywin32>=306
+pyinstaller>=6.0
+striprtf>=0.0.27
+chardet>=5.0

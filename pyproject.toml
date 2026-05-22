@@ -1,0 +1,60 @@
+[project]
+name = "ost2pst"
+version = "3.1.0"
+description = "Procesador de ficheros Outlook OST: exportación a PST (Outlook COM) o extracción a EML/MBOX (libpff)."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+authors = [{ name = "ost2pst project" }]
+classifiers = [
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Communications :: Email",
+    "Topic :: System :: Archiving",
+]
+dependencies = [
+    "libpff-python==20211114",
+    "pywin32>=306",
+    "striprtf>=0.0.27",
+    "chardet>=5.0",
+]
+
+[project.optional-dependencies]
+build = ["pyinstaller>=6.0"]
+dev = ["pytest>=7.0", "ruff>=0.4"]
+
+[project.scripts]
+ost2pst = "ost2pst:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+extend-exclude = ["build", "dist", "vendor", ".github"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "W",   # pycodestyle warnings
+    "I",   # isort
+    "B",   # bugbear
+    "UP",  # pyupgrade
+    "SIM", # simplify
+]
+ignore = [
+    "E501",   # line length: ya hay límite separado
+    "E741",   # ambiguous variable names (algunos f, l...)
+    "SIM105", # contextlib.suppress vs try/except - menos legible aquí
+    "B007",   # unused loop variable (a veces intencional)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*.py" = ["E402", "F401"]  # sys.path hack + posibles imports unused
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-ra --strict-markers"

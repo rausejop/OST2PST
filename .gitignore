@@ -1,0 +1,38 @@
+# PyInstaller
+build/
+dist/
+*.spec
+!ost2pst.spec.template
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# IDE / agentes
+.vscode/
+.idea/
+.claude/
+*.swp
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Auto-generated
+version_info.txt
+
+# Datos sensibles - nunca commitear OST/PST de prueba
+*.ost
+*.pst
+tests/fixtures/*.ost
+tests/fixtures/*.pst

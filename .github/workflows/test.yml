@@ -1,0 +1,52 @@
+name: tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  unit-tests:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies (prefer vendor/)
+        run: |
+          python -m pip install --upgrade pip
+          if (Test-Path vendor) {
+            python -m pip install --find-links vendor -r requirements.txt
+          } else {
+            python -m pip install -r requirements.txt
+          }
+          python -m pip install pytest ruff
+
+      - name: Ruff check
+        run: python -m ruff check ost2pst.py tests/
+
+      - name: Run tests
+        run: python -m pytest tests/ -v
+
+      - name: Build executable
+        run: |
+          python -m PyInstaller --onefile --console --name ost2pst `
+            --clean --noconfirm --add-data "ost2pst.py;." ost2pst.py
+          .\dist\ost2pst.exe --version
+          .\dist\ost2pst.exe --help | Out-Null
+
+      - name: Smoke test compiled exe
+        run: |
+          # Validar exit codes esperados con args inválidos
+          $proc = Start-Process -FilePath .\dist\ost2pst.exe `
+            -ArgumentList '--extract','-i','fake.ost','-o','tmp' `
+            -PassThru -Wait -NoNewWindow
+          if ($proc.ExitCode -ne 4) {
+            throw "esperado exit 4 (input no existe), recibido $($proc.ExitCode)"
+          }
+          Write-Host "smoke test OK"
